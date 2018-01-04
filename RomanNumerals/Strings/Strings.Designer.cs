@@ -61,7 +61,7 @@ namespace RomanNumerals.Strings {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a number between 1 and 1000000 or 0 to quit..
+        ///   Looks up a localized string similar to Enter a number between {0} and {1} or {2} to quit..
         /// </summary>
         internal static string FirstMessageToUser {
             get {

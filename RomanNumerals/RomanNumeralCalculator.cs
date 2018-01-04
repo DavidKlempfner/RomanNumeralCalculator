@@ -37,36 +37,65 @@ namespace RomanNumerals
         public static string CalculateRomanNumeral(int currentInput)
         {
             string answer = "";
+            int nextInput = 0;
+
             if (InputValidator.IsInputValid(currentInput))
             {
-                if (_romanNumerals.ContainsValue(currentInput))
+                if (IsInputEqualToOneOfTheRomanNumerals(currentInput))
                 {
                     string romanNumeral = GetRomanNumeralFromValue(currentInput);
                     return romanNumeral;
                 }
-
-                int lowerRomanNumeralValue = GetLowerRomanNumeralValue(currentInput);
-                int upperRomanNumeralValue = GetUpperRomanNumeralValue(lowerRomanNumeralValue);
-                int upperRomanNumeralValueMinusInput = upperRomanNumeralValue - currentInput;
-                int lowerPowerOfTenRomanNumeralValue = GetLowerPowerOfTenRomanNumeralValue(lowerRomanNumeralValue, upperRomanNumeralValue);
-
-                int nextInput = 0;
-
-                if (upperRomanNumeralValueMinusInput <= lowerPowerOfTenRomanNumeralValue)
+                if (IsInputLargerThanLargestRomanNumeralValue(currentInput))
                 {
-                    string lowerPowerOfTenRomanNumeralInFrontOfUpperRomanNumeral = ConcatenateRomanNumeralsFromValues(lowerPowerOfTenRomanNumeralValue, upperRomanNumeralValue);
-                    int lowerPowerOfTenRomanNumeralInFrontOfUpperRomanNumeralValue = upperRomanNumeralValue - lowerPowerOfTenRomanNumeralValue;
-                    answer += lowerPowerOfTenRomanNumeralInFrontOfUpperRomanNumeral;                    
-                    nextInput = currentInput - lowerPowerOfTenRomanNumeralInFrontOfUpperRomanNumeralValue;
+                    int largestRomanNumeralValue = GetLargestRomanNumeralValue();
+                    string largestRomanNumeral = GetRomanNumeralFromValue(largestRomanNumeralValue);
+                    answer += largestRomanNumeral;
+                    nextInput = currentInput - largestRomanNumeralValue;
                 }
                 else
                 {
-                    answer += GetRomanNumeralFromValue(lowerRomanNumeralValue);
-                    nextInput = currentInput - lowerRomanNumeralValue;
+                    int lowerRomanNumeralValue = GetLowerRomanNumeralValue(currentInput);
+                    int upperRomanNumeralValue = GetUpperRomanNumeralValue(lowerRomanNumeralValue);
+                    int upperRomanNumeralValueMinusInput = upperRomanNumeralValue - currentInput;
+                    int lowerPowerOfTenRomanNumeralValue = GetLowerPowerOfTenRomanNumeralValue(lowerRomanNumeralValue, upperRomanNumeralValue);
+
+                    if (CanInputBeWrittenAsSmallerNumeralInFrontOfLargerNumeral(upperRomanNumeralValueMinusInput, lowerPowerOfTenRomanNumeralValue))
+                    {
+                        string lowerPowerOfTenRomanNumeralInFrontOfUpperRomanNumeral = ConcatenateRomanNumeralsFromValues(lowerPowerOfTenRomanNumeralValue, upperRomanNumeralValue);
+                        int lowerPowerOfTenRomanNumeralInFrontOfUpperRomanNumeralValue = upperRomanNumeralValue - lowerPowerOfTenRomanNumeralValue;
+                        answer += lowerPowerOfTenRomanNumeralInFrontOfUpperRomanNumeral;
+                        nextInput = currentInput - lowerPowerOfTenRomanNumeralInFrontOfUpperRomanNumeralValue;
+                    }
+                    else
+                    {
+                        answer += GetRomanNumeralFromValue(lowerRomanNumeralValue);
+                        nextInput = currentInput - lowerRomanNumeralValue;
+                    }
                 }
                 answer += CalculateRomanNumeral(nextInput);
             }
             return answer;
+        }
+
+        private static bool CanInputBeWrittenAsSmallerNumeralInFrontOfLargerNumeral(int upperRomanNumeralValueMinusInput, int lowerPowerOfTenRomanNumeralValue)
+        {
+            return upperRomanNumeralValueMinusInput <= lowerPowerOfTenRomanNumeralValue;
+        }
+
+        private static bool IsInputEqualToOneOfTheRomanNumerals(int currentInput)
+        {
+            return _romanNumerals.ContainsValue(currentInput);
+        }
+
+        private static bool IsInputLargerThanLargestRomanNumeralValue(int input)
+        {
+            return input > GetLargestRomanNumeralValue();
+        }
+
+        private static int GetLargestRomanNumeralValue()
+        {
+            return GetRomanNumeralValueAtIndex(_romanNumerals.Count - 1);
         }
         
         private static int GetLowerPowerOfTenRomanNumeralValue(int lowerRomanNumeralValue, int upperRomanNumeralValue)

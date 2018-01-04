@@ -15,8 +15,12 @@ namespace RomanNumerals
         static void Main(string[] args)
         {
             int input = 0;
+
             //Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("de-DE"); //Use this to test different languages.
-            OutputDisplayer.DisplayOutput(Strings.Strings.FirstMessageToUser);
+            
+            string introMessage = string.Format(Strings.Strings.FirstMessageToUser, Constants.MinimumValueComputable, Constants.MaximumValueComputable, 0);
+            OutputDisplayer.DisplayOutput(introMessage);
+            
             do
             {
                 input = Int32.Parse(InputGatherer.GetInputFromUser());
