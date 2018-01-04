@@ -18,18 +18,13 @@
  * Continue with the above process until the value of the next bit to calculate is 0, in which case you display your output.
  */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RomanNumerals
 {
     public static class RomanNumeralCalculator
     {        
-        private static OrderedDictionary _romanNumerals = new OrderedDictionary()
+        private static readonly OrderedDictionary RomanNumerals = new OrderedDictionary()
         { 
             {"I", 1}, {"V", 5}, {"X", 10}, {"L", 50}, {"C", 100}, {"D", 500}, {"M", 1000}, {"V`", 5000}, {"X`", 10000}, {"L`", 50000}, {"C`", 100000}, {"D`", 500000}, {"M`", 1000000}
         };        
@@ -37,7 +32,6 @@ namespace RomanNumerals
         public static string CalculateRomanNumeral(int currentInput)
         {
             string answer = "";
-            int nextInput = 0;
 
             if (InputValidator.IsInputValid(currentInput))
             {
@@ -46,6 +40,7 @@ namespace RomanNumerals
                     string romanNumeral = GetRomanNumeralFromValue(currentInput);
                     return romanNumeral;
                 }
+                int nextInput;
                 if (IsInputLargerThanLargestRomanNumeralValue(currentInput))
                 {
                     int largestRomanNumeralValue = GetLargestRomanNumeralValue();
@@ -85,7 +80,7 @@ namespace RomanNumerals
 
         private static bool IsInputEqualToOneOfTheRomanNumerals(int currentInput)
         {
-            return _romanNumerals.ContainsValue(currentInput);
+            return RomanNumerals.ContainsValue(currentInput);
         }
 
         private static bool IsInputLargerThanLargestRomanNumeralValue(int input)
@@ -95,7 +90,7 @@ namespace RomanNumerals
 
         private static int GetLargestRomanNumeralValue()
         {
-            return GetRomanNumeralValueAtIndex(_romanNumerals.Count - 1);
+            return GetRomanNumeralValueAtIndex(RomanNumerals.Count - 1);
         }
         
         private static int GetLowerPowerOfTenRomanNumeralValue(int lowerRomanNumeralValue, int upperRomanNumeralValue)
@@ -125,7 +120,7 @@ namespace RomanNumerals
             }
             else
             {
-                int lowerRomanNumeralIndex = _romanNumerals.IndexOfValue(currentValue);
+                int lowerRomanNumeralIndex = RomanNumerals.IndexOfValue(currentValue);
                 for (int i = lowerRomanNumeralIndex; i >= 0; i--)
                 {
                     int currentRomanNumeralValue = GetRomanNumeralValueAtIndex(i);
@@ -141,14 +136,14 @@ namespace RomanNumerals
 
         private static int GetUpperRomanNumeralValue(int lowerRomanNumeralValue)
         {
-            int indexOfLowerRomanNumeral = _romanNumerals.IndexOfValue(lowerRomanNumeralValue);
+            int indexOfLowerRomanNumeral = RomanNumerals.IndexOfValue(lowerRomanNumeralValue);
             int upperRomanNumeralValue = GetRomanNumeralValueAtIndex(indexOfLowerRomanNumeral + 1);
             return upperRomanNumeralValue;
         }
 
         private static int GetLowerRomanNumeralValue(int input)
         {
-            for (int i = _romanNumerals.Count - 1; i >= 0; i--)
+            for (int i = RomanNumerals.Count - 1; i >= 0; i--)
             {
                 int romanNumeralValue = GetRomanNumeralValueAtIndex(i);
 
@@ -162,12 +157,12 @@ namespace RomanNumerals
 
         private static int GetRomanNumeralValueAtIndex(int index)
         {
-            return (int)_romanNumerals[index];
+            return (int)RomanNumerals[index];
         }
 
         private static string GetRomanNumeralFromValue(int value)
         {
-            return (string)_romanNumerals.GetKeyFromFirstElementWithValue(value);
+            return (string)RomanNumerals.GetKeyFromFirstElementWithValue(value);
         }
     }
 }
